@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dotnetapp
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: dotnetapp
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnetapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dotnetapp
+  template:
+    metadata:
+      labels:
+        app: dotnetapp
+    spec:
+      containers:
+        - image: "brunoterkaly/dotnetlinux" // taken sample dotnet image from docker registry
+          imagePullPolicy: Always
+          name: dotnetapp
+          ports:
+            - containerPort: 80
