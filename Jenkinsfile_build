@@ -1,0 +1,26 @@
+pipeline {
+        agent any
+		stages {
+			stage('Git Checkout') {
+				steps {
+					sh 'git config --global http.sslverify "false"'
+					checkout scm
+				}
+			}
+			
+			stage('Build and Push') {
+				steps {
+					script {
+					    
+						sh """
+							set +x
+							docker build -t app .
+							docker tag app gcr.io/projectid/app:$BUILD_NUMBER // tag it as per the cloud env formate for example i'm pushing the image to google registry
+              docker push gcr.io/projectid/app:$BUILD_NUMBER
+							set -x
+						"""
+					}
+}
+            }
+        }
+}
