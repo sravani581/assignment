@@ -1,0 +1,26 @@
+pipeline {
+        agent any
+}
+		stages {
+			stage('Git Checkout') {
+				steps {
+					sh 'git config --global http.sslverify "false"'
+					checkout scm
+				}
+			}
+			
+			stage('execute deployment files') {
+				steps {
+					script {
+					    
+						sh """
+							set +x
+
+             kubectl apply -f deploy.yml
+							set -x
+						"""
+					}
+}
+            }
+        }
+}
